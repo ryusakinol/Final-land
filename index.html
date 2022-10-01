@@ -1,0 +1,117 @@
+<Doctypehtml>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monters Land!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section id="seleccionar-personaje">
+        <h1 class="titulo">🪓🩸⛩Final Land 🎒🧢</h1>
+
+        <h2 class="sub">Elige a tu Personaje:</h2>
+
+        <div class="tarjetas">
+            <input  type="radio" name="mascota" id="yfryr">
+            <label class="tarjeta-de-personaje " for="yfryr">
+                 <p>Yfryr</p>
+                 <img src="./imagenes/14-Squall-Leonhart-final.png" alt="">
+            </label>
+
+            <input type="radio" name="mascota" id="watta">
+            <label class="tarjeta-de-personaje " for="watta">
+                <p>Watta</p>
+                <img src="./imagenes/laguna.png" alt="Watta">
+            </label>
+
+            <input type="radio" name="mascota" id="allen">
+            <label class="tarjeta-de-personaje " for="allen">
+                <p>Allen</p>
+                <img src="./imagenes/ff7.png" alt="Allen" class="ff7">
+            </label>
+            
+            <input type="radio" name="mascota" id="growdo">
+            <label class="tarjeta-de-personaje" for="growdo">
+                <p>growdo</p>
+                <img src="./imagenes/zack.png" alt="growdo" id="zack">
+            </label>
+        </div>
+            
+            <button id="btn-select">Seleccionar</button>
+    </section>
+
+    <section id="character" hidden>Historia de los Personajes
+        <ul>
+            <li>Squall Leonhart</li>
+            <li>Laguna Loire</li>
+            <li>Seifer Almasy</li>
+            <li>Zack</li>
+        </ul>
+    </section>
+
+    <section id="seleccionar-ataque" hidden>
+        <h1 class="titulo">🪓🩸⛩Final Land 🎒🧢</h1>
+
+        <h2>Elige tu ataque:</h2>
+
+        <div class="btn-attack">
+            <button id="btn-fuego" class="btn-ataque">Fuego 🔥</button>
+            <button id="btn-tierra" class="btn-ataque">Tierra 🌱</button>
+            <button id="btn-agua" class="btn-ataque">Agua 💦</button>
+            <button id="btn-aire" class="btn-ataque">Aire 🛬</button>
+        </div>
+
+        <div id="mensajes">
+            <p id="resultado">Mucha suerte</p>
+        
+            <section id="reiniciar" hidden>
+                <button id="btn-reinirciar">Volver a Jugar</button>
+            </section>   
+        </div>
+
+        <div class="ataques">
+            <div id="jugador-profile">
+                <p id="vidas-jugador">3</p>
+                <p id="monstro-jugador"></p>
+                <div id="ataques-del-jugador"></div>
+            </div>
+
+            <div id="enemigo-profile">
+                <p id="vidas-enemigo">3</p>
+                <p id="monstro-enemigo"></p>
+                <div id="ataques-del-enemigo"></div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <div id="squall" hidden>
+            <p> es el protagonista de Final Fantasy VIII. Es un joven seed que suele ser introvertido. Algunos lo consideran como una persona fría y seria; siempre enfocado en lo que tiene que hacer. Pero a través de los sucesos del juego hace un cambio en su forma de Su arma, el sable pistola, es una de las armas más emblemáticas de la serie de Final Fantasy .</p>
+        </div>
+
+        <div id="laguna" hidden>
+           <p> "Laguna Loire es un personaje de Final Fantasy VIII. Es controlable durante las escenas de sueños que tienen los personajes principales de la historia. Es el padre de Squall Leonhart y su arma es una ametralladora."</p>
+
+            <p>Laguna tiene los ojos verdes y el pelo de color castaño oscuro y liso, y le llega casi hasta los hombros. Es alegre, generoso y amable, y aunque odia luchar, se une al ejército de Galbadia. Sus compañeros, Kiros y Ward, suelen salir perjudicados por culpa de los actos impulsivos de Laguna, pero confían en él. No duda en enfrentarse al peligro, sobre todo para proteger a sus amigos, y daría su vida por la justicia.
+
+                Laguna suele confundir refranes y frases hechas, cosa que hace reír a Kiros y Ward, que siempre acaban corrigiéndolo mientras Laguna corta la conversación, avergonzado. También le cuesta bastante hablar con mujeres, y cuando se pone nervioso, le dan tirones en la pierna. Está enamorado de Julia Heartilly, una pianista muy famosa en Deling, y al final consigue tener una conversación más o menos «normal» con ella, en la que le cuenta que su verdadero sueño es ser periodista y escribir sobre las aventuras que ha vivido con sus amigos.
+                
+                Cuando el grupo controla a Laguna por primera vez, lleva el uniforme de los soldados de Galbadia, pero sin el casco. Su ropa normal en los flashbacks consiste en una chaqueta azul de manga corta, una camisa blanca, pantalones marrones y botas negras. Durante la historia principal, lleva una camisa azul de botones, unos pantalones marrones y unas sandalias</p>
+        </div>
+
+        <div id="seifer">
+            
+        </div>
+
+        <div id="zack-cra">
+            
+        </div>
+    </section>
+    <!-- <footer>
+        <p>Copyright: <span>{new Date().getFullYear()}</span> &copy</p>
+    </footer> -->
+    <script src="app.js"></script>
+</body>
+</html>
