@@ -27,7 +27,6 @@ let personajes = []
 let ataqueJugador;
 let ataqueEnemigo;
 let opcionDePersonajes;
-
 let vidaJugador = 3;
 let vidaEnemigo = 3;
 
@@ -91,8 +90,9 @@ function iniciarJuego() {
       <img src=${personaje.foto} alt=${personaje.nombre}>
     </label>
     `
-    contenedorTarjetas.innerHTML = opcionDePersonajes
-  });
+    contenedorTarjetas.innerHTML += opcionDePersonajes
+      // console.log(personaje);
+  })
 
   botonMascotaJugador.addEventListener("click", seleccionarMascotaJugador);
   botonShow.addEventListener("click", show);
@@ -234,8 +234,6 @@ function crearMensajeFinal(resultadoFinal) {
   botonAire.disabled = true;
   botonTierra.disabled = true;
 }
-
-seleccionarMascotaJugador();
 
 function reiniciarJuego() {
   location.reload();
