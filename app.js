@@ -8,10 +8,7 @@ const botonAire = document.getElementById("btn-aire");
 const botonTierra = document.getElementById("btn-tierra");
 const spanMonstroEnemy = document.getElementById("monstro-enemigo");
 
-const inputYfryr = document.getElementById("yfryr");
-const inputWatta = document.getElementById("watta");
-const inputAllen = document.getElementById("allen");
-const inputGrowdo = document.getElementById("growdo");
+
 
 const monstroJugador = document.getElementById("monstro-jugador");
 
@@ -29,6 +26,10 @@ let ataqueEnemigo;
 let opcionDePersonajes;
 let vidaJugador = 3;
 let vidaEnemigo = 3;
+let inputYfryr
+let inputWatta
+let inputAllen
+let inputGrowdo
 
 class Personaje {
   constructor(nombre, foto, vida) {
@@ -39,10 +40,10 @@ class Personaje {
   }
 }
 
-let yfryr = new Personaje("yfryr", "./imagenes/14-Squall-Leonhart-final.png", 5);
-let growdo = new Personaje("growdo", "./imagenes/laguna.png", 5);
-let allen = new Personaje("allen", "./imagenes/ff7.png", 5);
-let watta = new Personaje("watta", "./imagenes/zack.png", 5);
+let yfryr = new Personaje("Yfryr", "./imagenes/14-Squall-Leonhart-final.png", 5);
+let growdo = new Personaje("Growdo", "./imagenes/laguna.png", 5);
+let allen = new Personaje("Allen", "./imagenes/ff7.png", 5);
+let watta = new Personaje("Watta", "./imagenes/zack.png", 5);
 
 yfryr.ataques.push(
   { nombre: "🩸", id: "btn-fuego" },
@@ -92,6 +93,11 @@ function iniciarJuego() {
     `
     contenedorTarjetas.innerHTML += opcionDePersonajes
       // console.log(personaje);
+
+     inputYfryr = document.getElementById("Yfryr");
+     inputWatta = document.getElementById("Watta");
+     inputAllen = document.getElementById("Allen");
+     inputGrowdo = document.getElementById("Growdo");
   })
 
   botonMascotaJugador.addEventListener("click", seleccionarMascotaJugador);
@@ -108,29 +114,22 @@ function seleccionarMascotaJugador() {
   seccionSeleccionar.style.display = "none";
   
   if (inputYfryr.checked) {
-    monstroJugador.innerHTML = "Yfryr";
+    monstroJugador.innerHTML = inputYfryr.id;
   } else if (inputWatta.checked) {
-    monstroJugador.innerHTML = "Watta";
+    monstroJugador.innerHTML = inputWatta.id;
   } else if (inputAllen.checked) {
-    monstroJugador.innerHTML = "Allen";
+    monstroJugador.innerHTML = inputAllen.id;
   } else if (inputGrowdo.checked) {
-    monstroJugador.innerHTML = "Growdo";
+    monstroJugador.innerHTML = inputGrowdo.id;
   } else {
   }
-  seleccionarMascotaEnemigo();
+  seleccionarPersonajeEnemigo();
 }
 
-function seleccionarMascotaEnemigo() {
-  let MonstroAleatorio = aleatorio(1, 4);
-  if (MonstroAleatorio == 1) {
-    spanMonstroEnemy.innerHTML = "Yfryr";
-  } else if (MonstroAleatorio == 2) {
-    spanMonstroEnemy.innerHTML = "Watta";
-  } else if (MonstroAleatorio == 3) {
-    spanMonstroEnemy.innerHTML = "Allen";
-  } else {
-    spanMonstroEnemy.innerHTML = "Growdo";
-  }
+function seleccionarPersonajeEnemigo() {
+  let MonstroAleatorio = aleatorio(0, personajes.length -1);
+  
+  spanMonstroEnemy.innerHTML = personajes[MonstroAleatorio].nombre
 }
 
 // ATAQUE JUGADOR
