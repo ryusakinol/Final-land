@@ -1,28 +1,22 @@
 const seccionSeleccionar = document.getElementById("seleccionar-personaje");
-const botonMascotaJugador = document.getElementById("btn-select");
-const botonReiniciar = document.getElementById("btn-reinirciar");
+const botonReiniciar = document.getElementById("btn-reiniciar");
+const botonPersonajeJugador = document.getElementById("btn-select");
+
+const personaJugador = document.getElementById("personaje-jugador");
+const personaEnemy = document.getElementById("personaje-enemigo");
 const botonShow = document.getElementById("btn-select");
-const botonFuego = document.getElementById("btn-fuego");
-const botonAgua = document.getElementById("btn-agua");
-const botonAire = document.getElementById("btn-aire");
-const botonTierra = document.getElementById("btn-tierra");
-const spanMonstroEnemy = document.getElementById("monstro-enemigo");
-
-
-
-const monstroJugador = document.getElementById("monstro-jugador");
-
 const spanJugador = document.getElementById("vidas-jugador");
 const spanEnemigo = document.getElementById("vidas-enemigo");
 
 const seccionMensaje = document.getElementById("resultado");
 const ataquesDelJugador = document.getElementById("ataques-del-jugador");
 const ataquesDelEnemigo = document.getElementById("ataques-del-enemigo");
-const contenedorTarjetas = document.getElementById("contenedorTarjetas");
+const contenedorTarjetas = document.getElementById("contenedor-tarjetas");
+const contenedorAtaques = document.getElementById('contenedor-ataques')
 
 let personajes = []
-let ataqueJugador;
-let ataqueEnemigo;
+let ataqueJugador = []
+let ataqueEnemigo = []
 let opcionDePersonajes;
 let vidaJugador = 3;
 let vidaEnemigo = 3;
@@ -30,7 +24,14 @@ let inputYfryr
 let inputWatta
 let inputAllen
 let inputGrowdo
-
+let personajeJugador
+let ataquesPersonaje
+let botonAire
+let botonTierra
+let botonFuego 
+let botonAgua 
+let botones = []
+let ataquesPersonajeEnemigo
 class Personaje {
   constructor(nombre, foto, vida) {
     this.nombre = nombre;
@@ -46,10 +47,10 @@ let allen = new Personaje("Allen", "./imagenes/ff7.png", 5);
 let watta = new Personaje("Watta", "./imagenes/zack.png", 5);
 
 yfryr.ataques.push(
-  { nombre: "🩸", id: "btn-fuego" },
+  { nombre: "🔥", id: "btn-fuego" },
   { nombre: "💦", id: "btn-agua" },
   { nombre: "🛬", id: "btn-aire" },
-  { nombre: "🩸", id: "btn-fuego" },
+  { nombre: "🌱", id: "btn-tierra" },
   { nombre: "🔥", id: "btn-fuego" },
 );
 
@@ -62,19 +63,19 @@ growdo.ataques.push(
 );
 
 allen.ataques.push(
-  { nombre: "🩸", id: "btn-fuego" },
+  { nombre: "🔥", id: "btn-fuego" },
   { nombre: "💦", id: "btn-agua" },
-  { nombre: "💦", id: "btn-agua" },
+  { nombre: "🛬", id: "btn-aire" },
   { nombre: "💦", id: "btn-agua" },
   { nombre: "🌱", id: "btn-tierra" },
 );
 
 watta.ataques.push(
-  { nombre: "🩸", id: "btn-fuego" },
-  { nombre: "🩸", id: "btn-fuego" },
+  { nombre: "🔥", id: "btn-fuego" },
+  { nombre: "💦", id: "btn-agua" },
   { nombre: "🌱", id: "btn-tierra" },
   { nombre: "🌱", id: "btn-tierra" },
-  { nombre: "🩸", id: "btn-fuego" },
+  { nombre: "🛬", id: "btn-aire" },
 );
 
 personajes.push(yfryr, growdo, allen, watta);
@@ -92,7 +93,6 @@ function iniciarJuego() {
     </label>
     `
     contenedorTarjetas.innerHTML += opcionDePersonajes
-      // console.log(personaje);
 
      inputYfryr = document.getElementById("Yfryr");
      inputWatta = document.getElementById("Watta");
@@ -100,68 +100,105 @@ function iniciarJuego() {
      inputGrowdo = document.getElementById("Growdo");
   })
 
-  botonMascotaJugador.addEventListener("click", seleccionarMascotaJugador);
+  botonPersonajeJugador.addEventListener("click", seleccionarPersonajeJugador);
   botonShow.addEventListener("click", show);
-  botonFuego.addEventListener("click", ataqueFuego);
-  botonAgua.addEventListener("click", ataqueAgua);
-  botonAire.addEventListener("click", ataqueAire);
-  botonTierra.addEventListener("click", ataqueTierra);
   botonReiniciar.addEventListener("click", reiniciarJuego);
 }
 
-function seleccionarMascotaJugador() {
+function seleccionarPersonajeJugador() {
 
   seccionSeleccionar.style.display = "none";
   
   if (inputYfryr.checked) {
-    monstroJugador.innerHTML = inputYfryr.id;
+   personaJugador.innerHTML = inputYfryr.id;
+    personajeJugador = inputYfryr.id
   } else if (inputWatta.checked) {
-    monstroJugador.innerHTML = inputWatta.id;
+    personaJugador.innerHTML = inputWatta.id;
+    personajeJugador = inputWatta.id
   } else if (inputAllen.checked) {
-    monstroJugador.innerHTML = inputAllen.id;
+    personaJugador.innerHTML = inputAllen.id;
+    personajeJugador =  inputAllen.id
   } else if (inputGrowdo.checked) {
-    monstroJugador.innerHTML = inputGrowdo.id;
+    personaJugador.innerHTML = inputGrowdo.id;
+    personajeJugador = inputGrowdo.id
   } else {
+    alert('Seleciona un personaje')  
   }
+  extraerAtaques(personajeJugador)
   seleccionarPersonajeEnemigo();
 }
 
-function seleccionarPersonajeEnemigo() {
-  let MonstroAleatorio = aleatorio(0, personajes.length -1);
-  
-  spanMonstroEnemy.innerHTML = personajes[MonstroAleatorio].nombre
+function extraerAtaques(personajeJugador) {
+  let ataques 
+  for (let i = 0; i < personajes.length; i++) {
+    if (personajeJugador === personajes[i].nombre) {
+        ataques = personajes[i].ataques
+    }    
+  }
+  mostrarAtaques(ataques)
 }
 
-// ATAQUE JUGADOR
-function ataqueFuego() {
-  ataqueJugador = "Fuego";
-  ataqueAleatorioEnemgio();
+function mostrarAtaques(ataques) {
+  ataques.forEach((ataque) => {
+    ataquesPersonaje = `
+    <button id=${ataque.id} class="btn-ataque BAtaque">${ataque.nombre}</button>`
+
+    contenedorAtaques.innerHTML += ataquesPersonaje
+  })
+
+  botonFuego = document.getElementById("btn-fuego");
+  botonAire = document.getElementById("btn-aire");
+  botonAgua = document.getElementById("btn-agua");
+  botonTierra = document.getElementById("btn-tierra");
+  botones = document.querySelectorAll('.BAtaque');
 }
-function ataqueAgua() {
-  ataqueJugador = "Agua";
-  ataqueAleatorioEnemgio();
+
+function secuenciaAtaque() {
+  botones.forEach((boton) => {
+    boton.addEventListener('click', (e) => {
+      if(e.target.textContent === '🔥') {
+          ataqueJugador.push('FUEGO')
+          console.log(ataqueJugador);
+          boton.style.background = "#112f58"
+      } else if (e.target.textContent === '💦') {
+          ataqueJugador.push('AGUA')
+          console.log(ataqueJugador);
+          boton.style.background = "#112f58"
+      } else if (e.target.textContent === '🛬') {
+          ataqueJugador.push('Aire')
+          console.log(ataqueJugador);
+          boton.style.background = "#112f58" 
+      } else {
+          ataqueJugador.push('TIERRA')
+          console.log(ataqueJugador);
+          boton.style.background = "#112f58" 
+      }
+      ataqueAleatorioEnemgio()
+    })
+  })
 }
-function ataqueAire() {
-  ataqueJugador = "Aire";
-  ataqueAleatorioEnemgio();
-}
-function ataqueTierra() {
-  ataqueJugador = "Tierra";
-  ataqueAleatorioEnemgio();
+
+function seleccionarPersonajeEnemigo() {
+  let personajeAleatorio = aleatorio(0, personajes.length -1);
+  
+  personaEnemy.innerHTML += personajes[personajeAleatorio].nombre
+  ataquesPersonajeEnemigo = personajes[personajeAleatorio].ataques
+  secuenciaAtaque()
 }
 
 function ataqueAleatorioEnemgio() {
-  let ataqueAleatorio = aleatorio(1, 4);
+  let ataqueAleatorio = aleatorio(0, ataquesPersonajeEnemigo.length -1);
 
-  if (ataqueAleatorio == 1) {
-    ataqueEnemigo = "Fuego";
-  } else if (ataqueAleatorio == 2) {
-    ataqueEnemigo = "Agua";
-  } else if (ataqueAleatorio == 3) {
-    ataqueEnemigo = "Aire";
+  if (ataqueAleatorio == 0 || ataqueAleatorio == 1) {
+    ataqueEnemigo.push("Fuego")
+  } else if (ataqueAleatorio == 2 || ataqueAleatorio == 4) {
+    ataqueEnemigo.push("Agua")
+  } else if (ataqueAleatorio == 5 || ataqueAleatorio== 6 ) {
+    ataqueEnemigo.push("AIRE")
   } else {
-    ataqueEnemigo = "Tierra";
+    ataqueEnemigo.push("TIERRA")
   }
+  console.log(ataqueEnemigo)
   combate();
 }
 
