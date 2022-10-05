@@ -287,7 +287,7 @@ function crearMensaje(resultado) {
 
   ataquesDelJugador.appendChild(nuevoAtaquedelJugador);
   ataquesDelEnemigo.appendChild(nuevoAtaquedelEnemigo);
-  reinirciar()
+  reinirciar();
 }
 
 function crearMensajeFinal(resultadoFinal) {
