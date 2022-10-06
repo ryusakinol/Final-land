@@ -14,6 +14,9 @@ const ataquesDelEnemigo = document.getElementById("ataques-del-enemigo");
 const contenedorTarjetas = document.getElementById("contenedor-tarjetas");
 const contenedorAtaques = document.getElementById('contenedor-ataques')
 
+const seccionVerMapa = document.getElementById('ver-mapa');
+const mapa = document.getElementById('mapa');
+
 let personajes = []
 let ataqueJugador = []
 let ataqueEnemigo = []
@@ -36,6 +39,8 @@ let indexAtaqueJugador
 let indexAtaqueEnemigo
 let botones = []
 let ataquesPersonajeEnemigo
+let lienzo = mapa.getContext("2d")
+
 class Personaje {
   constructor(nombre, foto, vida) {
     this.nombre = nombre;
@@ -87,6 +92,7 @@ personajes.push(yfryr, growdo, allen, watta);
 function iniciarJuego() {
 
   seccionSeleccionar.style.display = "flex";
+  seccionVerMapa.style.display = 'none'
 
   personajes.forEach((personaje) => {
     opcionDePersonajes = `
@@ -105,13 +111,26 @@ function iniciarJuego() {
   })
 
   botonPersonajeJugador.addEventListener("click", seleccionarPersonajeJugador);
-  botonShow.addEventListener("click", show);
+  // botonShow.addEventListener("click", show);
   botonReiniciar.addEventListener("click", reiniciarJuego);
 }
 
 function seleccionarPersonajeJugador() {
 
   seccionSeleccionar.style.display = "none";
+
+  // seccion
+
+  seccionVerMapa.style.display = 'flex'
+  let imagenDeYfryr = new Image()
+  imagenDeYfryr.src = yfryr.foto
+  lienzo.drawImage(
+    imagenDeYfryr,
+    20,
+    40,
+    100,
+    100
+  )
   
   if (inputYfryr.checked) {
    personaJugador.innerHTML = inputYfryr.id;
