@@ -41,13 +41,14 @@ class Personaje {
     this.nombre = nombre;
     this.foto = foto;
     this.vida = vida;
+    this.clase = clase;
     this.ataques = [];
   }
 }
 
 let yfryr = new Personaje("Yfryr", "./imagenes/14-Squall-Leonhart-final.png", 5);
 let growdo = new Personaje("Growdo", "./imagenes/laguna.png", 5);
-let allen = new Personaje("Allen", "./imagenes/ff7.png", 5);
+let allen = new Personaje("Allen", "./imagenes/ff7.png", 5, );
 let watta = new Personaje("Watta", "./imagenes/zack.png", 5);
 
 yfryr.ataques.push(
@@ -287,7 +288,7 @@ function crearMensaje(resultado) {
 
   ataquesDelJugador.appendChild(nuevoAtaquedelJugador);
   ataquesDelEnemigo.appendChild(nuevoAtaquedelEnemigo);
-  reinirciar();
+  reinirciar()
 }
 
 function crearMensajeFinal(resultadoFinal) {
