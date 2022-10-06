@@ -41,7 +41,6 @@ class Personaje {
     this.nombre = nombre;
     this.foto = foto;
     this.vida = vida;
-    this.clase = clase;
     this.ataques = [];
   }
 }
