@@ -23,6 +23,10 @@
     <section id="ver-mapa">
         <h1 class="titulo">Recorre el mapa con tu personaje</h1>
         <canvas id="mapa"></canvas>
+        <button onmouseout="detenerMovimiento()" onmousedown="moverAriba()">Arriba</button>
+        <button onmouseout="detenerMovimiento()" onmousedown="moverAbajo()">Abajo</button>
+        <button onmouseout="detenerMovimiento()" onmousedown="moverDerecha()">Derecha</button>
+        <button onmouseout="detenerMovimiento()" onmousedown="moverIzquierda()">Izquierda</button>
     </section>
 
     <section id="character" hidden>Historia de los Personajes
@@ -66,7 +70,7 @@
     </section>
     
     <section>
-        <div id="squall" hidden>
+        <div id="squall" class="squall-ff7" hidden>
             <p> es el protagonista de Final Fantasy VIII. Es un joven seed que suele ser introvertido. Algunos lo consideran como una persona fría y seria; siempre enfocado en lo que tiene que hacer. Pero a través de los sucesos del juego hace un cambio en su forma de Su arma, el sable pistola, es una de las armas más emblemáticas de la serie de Final Fantasy .</p>
         </div>
 
