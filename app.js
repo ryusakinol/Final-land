@@ -62,9 +62,9 @@ class Personaje {
 }
 
 let yfry = new Personaje("Yfry", "./imagenes/14-Squall-Leonhart-final.png", 5, "./imagenes/squall-map.png");
-let growdo = new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/zack-map.png");
+let growdo = new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/laguna-map.png");
 let allen = new Personaje("Allen", "./imagenes/ff7.png", 5, "./imagenes/s-map.png" );
-let watta = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/laguna-map.png");
+let watta = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/zack-map.png");
 
 yfry.ataques.push(
   { nombre: "🔥", id: "btn-fuego" },
@@ -385,7 +385,7 @@ function sePresionoUnaTecla(event) {
   }
 }
 function iniciarMapa() {
-  mapa.width = 700
+  mapa.width = 800
   mapa.height = 450
   personajeJugadorObjeto = obtenerObjetoPersonaje(personaJugador)
   intervalo = setInterval(pintarCanvas, 40)
