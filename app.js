@@ -17,11 +17,14 @@ const contenedorAtaques = document.getElementById('contenedor-ataques')
 const seccionVerMapa = document.getElementById('ver-mapa');
 const mapa = document.getElementById('mapa');
 
+let seccionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+
 let personajes = []
 let ataqueJugador = []
 let ataqueEnemigo = []
 let opcionDePersonajes;
 let personajeJugadorObjeto
+let personajeEnemigoObjeto
 let vidaJugador = 3;
 let vidaEnemigo = 3;
 let inputYfry
@@ -50,14 +53,25 @@ class Personaje {
     this.foto = foto;
     this.vida = vida;
     this.ataques = [];
-    this.x = 20
-    this.y = 30
-    this.ancho = 80
-    this.alto = 80
+    this.x = x
+    this.y = y
+    this.ancho = 50
+    this.alto = 50
     this.mapaFoto = new Image()
     this.mapaFoto.src = fotoMapa
     this.velocidadX = 0
     this.velocidadY = 0
+  }
+
+  pintarPersonaje() {
+    lienzo.drawImage(
+      // enemygo
+    this.mapaFoto,
+    this.x,
+    this.y,
+    this.ancho,
+    this.alto,
+    )
   }
 }
 
@@ -65,6 +79,12 @@ let yfry = new Personaje("Yfry", "./imagenes/14-Squall-Leonhart-final.png", 5, "
 let growdo = new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/laguna-map.png");
 let allen = new Personaje("Allen", "./imagenes/ff7.png", 5, "./imagenes/s-map.png" );
 let watta = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/zack-map.png");
+
+// enemy
+let yfryEnemigo = new Personaje("Yfry", "./imagenes/14-Squall-Leonhart-final.png", 5, "./imagenes/squall-map.png", 100, 80);
+let growdoEnemigo = new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/laguna-map.png", 700, 300);
+let allenEnemigo = new Personaje("Allen", "./imagenes/ff7.png", 5, "./imagenes/s-map.png", 300, 200 );
+let wattaEnemigo = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/zack-map.png", 500, 450);
 
 yfry.ataques.push(
   { nombre: "🔥", id: "btn-fuego" },
@@ -102,7 +122,7 @@ personajes.push(yfry, growdo, allen, watta);
 
 function iniciarJuego() {
 
-  seccionSeleccionar.style.display = "flex";
+  seccionSeleccionarAtaque.style.display = 'none'
   seccionVerMapa.style.display = 'none'
 
   personajes.forEach((personaje) => {
@@ -122,18 +142,14 @@ function iniciarJuego() {
   })
 
   botonPersonajeJugador.addEventListener("click", seleccionarPersonajeJugador);
-  // botonShow.addEventListener("click", show);
+  botonShow.addEventListener("click", show);
   botonReiniciar.addEventListener("click", reiniciarJuego);
 }
 
 function seleccionarPersonajeJugador() {
 
-  seccionSeleccionar.style.display = "none";
+  seccionSeleccionar.style.display = 'none'
 
-  // seccion
-
-  
-  
   if (inputYfry.checked) {
    personaJugador.innerHTML = inputYfry.id;
     personajeJugador = inputYfry.id
@@ -224,7 +240,7 @@ function ataqueAleatorioEnemgio() {
     ataqueEnemigo.push("FUEGO")
   } else if (ataqueAleatorio == 2 || ataqueAleatorio == 4) {
     ataqueEnemigo.push("AGUA")
-  } else if (ataqueAleatorio == 5 || ataqueAleatorio== 6 ) {
+  } else if (ataqueAleatorio == 5 || ataqueAleatorio == 5 ) {
     ataqueEnemigo.push("AIRE")
   } else {
     ataqueEnemigo.push("TIERRA")
@@ -291,7 +307,7 @@ function revisarVidas() {
 
 function show() {
   let parrafo = document.getElementById("seleccionar-ataque");
-  parrafo.style.display = "flex";
+  parrafo.style.display = "none";
   parrafo.removeAttribute("hidden", "true");
 }
 
@@ -336,29 +352,33 @@ function pintarCanvas() {
     mapa.width,
     mapa.height
   )
-  lienzo.drawImage(
-    personajeJugadorObjeto.mapaFoto,
-    personajeJugadorObjeto.x,
-    personajeJugadorObjeto.y,
-    personajeJugadorObjeto.ancho,
-    personajeJugadorObjeto.alto,
-  )
+  personajeJugadorObjeto.pintarPersonaje()
+  yfryEnemigo.pintarPersonaje()
+  wattaEnemigo.pintarPersonaje()
+  growdoEnemigo.pintarPersonaje()
+  allenEnemigo.pintarPersonaje()
+  if (personajeJugadorObjeto.velocidadX !== 0 || personajeJugadorObjeto.velocidadY !== 0) {
+    revisarColision(yfryEnemigo)
+    revisarColision(allenEnemigo)
+    revisarColision(growdoEnemigo)
+    revisarColision(wattaEnemigo)
+  }
 }
 
 function moverArriba() {
-  personajeJugadorObjeto.velocidadY = -3
+  personajeJugadorObjeto.velocidadY = -5
 }
 
 function moverAbajo() {
-  personajeJugadorObjeto.velocidadY = 3
+  personajeJugadorObjeto.velocidadY = 5
 }
 
 function moverDerecha() {
-  personajeJugadorObjeto.velocidadX = 2
+  personajeJugadorObjeto.velocidadX = 5
 }
 
 function moverIzquierda() {
-  personajeJugadorObjeto.velocidadX = -2
+  personajeJugadorObjeto.velocidadX = -5
 }
 
 function detenerMovimiento(){
@@ -386,9 +406,9 @@ function sePresionoUnaTecla(event) {
 }
 function iniciarMapa() {
   mapa.width = 800
-  mapa.height = 450
+  mapa.height = 500
   personajeJugadorObjeto = obtenerObjetoPersonaje(personaJugador)
-  intervalo = setInterval(pintarCanvas, 40)
+  intervalo = setInterval(pintarCanvas, 20)
 
   window.addEventListener("keydown", sePresionoUnaTecla)
   
@@ -402,4 +422,30 @@ function obtenerObjetoPersonaje() {
     }    
   }
 }
+
+function revisarColision(enemigo){
+  const arribaEnemigo = enemigo.y
+  const abajoEnemigo = enemigo.y + enemigo.alto
+  const derechaEnemigo = enemigo.x + enemigo.ancho
+  const izquierdaEnemigo = enemigo.x
+
+  const arribaPersonaje = personajeJugadorObjeto.y
+  const abajoPersonaje = personajeJugadorObjeto.y + personajeJugadorObjeto.alto
+  const derechaPersonaje = personajeJugadorObjeto.x + personajeJugadorObjeto.ancho
+  const izquierdaPersonaje = personajeJugadorObjeto.x 
+
+  if(
+      abajoPersonaje < arribaEnemigo ||
+      arribaPersonaje > abajoEnemigo ||
+      derechaPersonaje < izquierdaEnemigo ||
+      izquierdaPersonaje > derechaEnemigo
+  ) {
+    return
+  }
+  detenerMovimiento()
+  seccionSeleccionarAtaque.style.display = "flex"
+  seccionVerMapa.style.display = "none"
+  // alert("Hay colision " + enemigo.nombre)
+}
+
 window.addEventListener("load", iniciarJuego);
