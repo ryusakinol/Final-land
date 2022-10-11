@@ -13,7 +13,7 @@ body {
   position: relative;
 }
 
-.sub {
+.subtitulo {
   color: white;
   font-size: 20px;
   height: 100px;
@@ -21,8 +21,7 @@ body {
   position: relative;
 }
 
-.tarjetas,
-.ataques {
+.tarjetas,.ataques {
   display: flex;
   gap: 10px;
 }
@@ -173,11 +172,18 @@ input:checked + label {
   justify-content: center;
 }
 
-#mapa {
-  border: 2px solid #ffffff;
+#ver-mapa button {
+  width: 80px;
+  height: 40px;
+  border-radius: 20px;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  margin: 10px 0;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 560px) {
   .titulo {
     color: white;
     font-size: 24px;
@@ -213,5 +219,13 @@ input:checked + label {
   #enemigo-profile {
     width: 100%;
     background: black;
+  }
+}
+
+@media (max-width: 300px) {
+  #ver-mapa{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
   }
 }
