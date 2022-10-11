@@ -7,48 +7,53 @@ app.use(cors())
 
 app.use(express.json())
 
-const jugadores=[]
+const jugadores = []
 
 class Jugador {
     constructor(id) {
-        this.id=id
+        this.id = id
     }
 
-    asignarMokepon(personaje) {
-        this.mokepon=mokepon
+    asignarPersonaje(personaje) {
+         this.personaje = this.personaje
     }
 }
-class Personaje{
+class Personaje {
     constructor(nombre) {
-        this.nombre=nombre
+        this.nombre = nombre
     }}
 
-app.get("/unirse",(req,res)=>{
+app.get("/unirse", (req, res) => {
 
-    const id=`${Math.random()}`
+    const id = `${Math.random()}`
 
-    const jugador=new Jugador(id)
+    const jugador = new Jugador(id)
 
     jugadores.push(jugador)
 
-    res.setHeader("Access-Control-Allow-Origin","*")
+    res.setHeader("Access-Control-Allow-Origin", "*")
 
-    res.send(id)})
+    res.send(id)
+})
 
-app.post("/mokepon/:jugadorId",(req,res)=>{const jugadorId=req.params.jugadorId||""
+app.post("/personaje/:jugadorId", (req, res) => {
 
-const nombre = req.body.personaje || ""
+    const jugadorId = req.params.jugadorId || ""
 
-const personaje = new Pokepon(nombre)
+    const nombre = req.body.personaje || ""
 
-const jugadorIndex = jugadores.findIndex((jugador) => jugadorId ===jugador.id)
+    const personaje = new Personaje(nombre)
 
-    if(jugadorIndex >= 0) {
-        jugadores[jugadorIndex].asignarMokepon(mokepon)
+    const jugadorIndex = jugadores.findIndex((jugador) => jugadorId === jugador.id)
+
+    if (jugadorIndex >= 0) {
+        jugadores[jugadorIndex].asignarPersonaje(personaje)
     }
+
     console.log(jugadores)
     console.log(jugadorId)
-    res.end()})
+    res.end()
+})
 
 app.listen(8080,()=>{
     console.log("Servidor funcionando")

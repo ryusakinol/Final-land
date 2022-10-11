@@ -12,14 +12,14 @@ const seccionMensaje = document.getElementById("resultado");
 const ataquesDelJugador = document.getElementById("ataques-del-jugador");
 const ataquesDelEnemigo = document.getElementById("ataques-del-enemigo");
 const contenedorTarjetas = document.getElementById("contenedor-tarjetas");
-const contenedorAtaques = document.getElementById('contenedor-ataques')
+const contenedorAtaques = document.getElementById("contenedor-ataques")
 
 const seccionVerMapa = document.getElementById('ver-mapa');
 const mapa = document.getElementById('mapa');
 
-const seccionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+const seccionSeleccionarAtaque = document.getElementById("seleccionar-ataque")
 
-let jugadorID = null
+let jugadorId = null
 let personajes = []
 let ataqueJugador = []
 let ataqueEnemigo = []
@@ -199,7 +199,7 @@ function unirseAlJuego() {
             res.text()
                 .then(function (respuesta){
                   console.log(respuesta)
-                  jugadorID = respuesta
+                  jugadorId = respuesta
                 })
         }
       })
@@ -225,18 +225,18 @@ function seleccionarPersonajeJugador() {
     alert('Seleciona un personaje')  
   }
   
-  seleccionarPersona(personaJugador)
+  seleccionarPersonaje(personajeJugador)
 
   extraerAtaques(personajeJugador)
   seccionVerMapa.style.display = 'flex'
   iniciarMapa()
 }
 
-function seleccionarPersona(personajeJugador) {
-    fetch(`http://localhost:8080/monterland/${jugadorID}`, {
+function seleccionarPersonaje(personajeJugador) {
+    fetch(`http://localhost:8080/personaje/${jugadorId}`, {
         method: "post",
         headers: {
-          "Content-type": "application/json"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           personaje: personajeJugador
