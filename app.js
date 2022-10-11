@@ -417,7 +417,11 @@ function pintarCanvas() {
     mapa.width,
     mapa.height
   )
+
   personajeJugadorObjeto.pintarPersonaje()
+  
+  enviarPosicion(personajeJugadorObjeto.x, personajeJugadorObjeto.y)
+
   yfryEnemigo.pintarPersonaje()
   wattaEnemigo.pintarPersonaje()
   growdoEnemigo.pintarPersonaje()
@@ -428,6 +432,19 @@ function pintarCanvas() {
     revisarColision(growdoEnemigo)
     revisarColision(wattaEnemigo)
   }
+}
+
+function enviarPosicion(x, y) {
+  fetch(`http://localhost:8080/monterland/${jugadorId}/posicion`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      x: x,
+      y: y
+    })
+  })
 }
 
 function moverArriba() {
