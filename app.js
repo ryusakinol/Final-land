@@ -21,6 +21,7 @@ const seccionSeleccionarAtaque = document.getElementById("seleccionar-ataque")
 
 let jugadorId = null
 let personajes = []
+let personajesEnemigos = []
 let ataqueJugador = []
 let ataqueEnemigo = []
 let opcionDePersonajes;
@@ -60,7 +61,8 @@ atluraQuebuscamos = anchoDelMapa * 600 / 800
 mapa.width = anchoDelMapa
 mapa.height = atluraQuebuscamos
 class Personaje {
-  constructor(nombre, foto, vida, fotoMapa) {
+  constructor(nombre, foto, vida, fotoMapa, id = null) {
+    this.id = id
     this.nombre = nombre;
     this.foto = foto;
     this.vida = vida;
@@ -92,75 +94,41 @@ let growdo = new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/lag
 let allen = new Personaje("Allen", "./imagenes/ff7.png", 5, "./imagenes/s-map.png" )
 let watta = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/zack-map.png")
 
-// Enemigo
-let yfryEnemigo = new Personaje("Yfry", "./imagenes/14-Squall-Leonhart-final.png", 5, "./imagenes/squall-map.png")
-let growdoEnemigo = new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/laguna-map.png")
-let allenEnemigo = new Personaje("Allen", "./imagenes/ff7.png", 5, "./imagenes/s-map.png" )
-let wattaEnemigo = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/zack-map.png")
-
-yfry.ataques.push(
+const YFRY_ATAQUES = [
   { nombre: "🔥", id: "btn-fuego" },
   { nombre: "💦", id: "btn-agua" },
   { nombre: "🛬", id: "btn-aire" },
   { nombre: "🌱", id: "btn-tierra" },
   { nombre: "🔥", id: "btn-fuego" },
-)
+]
+yfry.ataques.push(...YFRY_ATAQUES)
 
-growdo.ataques.push(
+const GROWDO_ATAQUES = [
   { nombre: "🔥", id: "btn-fuego" },
   { nombre: "💦", id: "btn-agua" },
   { nombre: "🌱", id: "btn-tierra" },
   { nombre: "🔥", id: "btn-fuego" },
   { nombre: "🛬", id: "btn-aire" },
-)
+]
+growdo.ataques.push(...GROWDO_ATAQUES)
 
-allen.ataques.push(
-  { nombre: "🔥", id: "btn-fuego" },
-  { nombre: "💦", id: "btn-agua" },
-  { nombre: "🛬", id: "btn-aire" },
-  { nombre: "💦", id: "btn-agua" },
-  { nombre: "🌱", id: "btn-tierra" },
-)
-
-watta.ataques.push(
-  { nombre: "🔥", id: "btn-fuego" },
-  { nombre: "💦", id: "btn-agua" },
-  { nombre: "🌱", id: "btn-tierra" },
-  { nombre: "🌱", id: "btn-tierra" },
-  { nombre: "🛬", id: "btn-aire" },
-)
-
-yfryEnemigo.ataques.push(
+const ALLEN_ATAQUES = [
   { nombre: "🔥", id: "btn-fuego" },
   { nombre: "💦", id: "btn-agua" },
   { nombre: "🛬", id: "btn-aire" },
   { nombre: "🌱", id: "btn-tierra" },
   { nombre: "🔥", id: "btn-fuego" },
-)
+]
+allen.ataques.push(...ALLEN_ATAQUES)
 
-growdoEnemigo.ataques.push(
-  { nombre: "🔥", id: "btn-fuego" },
-  { nombre: "💦", id: "btn-agua" },
-  { nombre: "🌱", id: "btn-tierra" },
-  { nombre: "🔥", id: "btn-fuego" },
-  { nombre: "🛬", id: "btn-aire" },
-)
-
-allenEnemigo.ataques.push(
-  { nombre: "🔥", id: "btn-fuego" },
-  { nombre: "💦", id: "btn-agua" },
-  { nombre: "🛬", id: "btn-aire" },
-  { nombre: "💦", id: "btn-agua" },
-  { nombre: "🌱", id: "btn-tierra" },
-)
-
-wattaEnemigo.ataques.push(
+const WATTA_ATAQUES = [
   { nombre: "🔥", id: "btn-fuego" },
   { nombre: "💦", id: "btn-agua" },
   { nombre: "🌱", id: "btn-tierra" },
   { nombre: "🌱", id: "btn-tierra" },
   { nombre: "🛬", id: "btn-aire" },
-)
+]
+watta.ataques.push(...WATTA_ATAQUES)
 
 personajes.push(yfry, growdo, allen, watta);
 
@@ -422,10 +390,9 @@ function pintarCanvas() {
   
   enviarPosicion(personajeJugadorObjeto.x, personajeJugadorObjeto.y)
 
-  yfryEnemigo.pintarPersonaje()
-  wattaEnemigo.pintarPersonaje()
-  growdoEnemigo.pintarPersonaje()
-  allenEnemigo.pintarPersonaje()
+  personajesEnemigos.forEach(function(personaje){
+    personaje.pintarPersonaje()
+  })
   if (personajeJugadorObjeto.velocidadX !== 0 || personajeJugadorObjeto.velocidadY !== 0) {
     revisarColision(yfryEnemigo)
     revisarColision(allenEnemigo)
@@ -444,6 +411,31 @@ function enviarPosicion(x, y) {
       x: x,
       y: y
     })
+  })
+  .then(function (res){
+    if (res.ok) {
+      res.json()
+          .then(function({ enemigos }){
+              console.log(enemigos)
+              personajesEnemigos = enemigos.map(function(enemigo) {
+              let personajeEnemigo = null
+              const personajeNombre = enemigo.personaje.nombre || ""
+              if (personajeNombre === "Yfry") {
+                  personajeEnemigo = new Personaje("Yfry", "./imagenes/14-Squall-Leonhart-final.png", 5, "./imagenes/squall-map.png")
+              } else if (personajeNombre === "Growdo") {
+                  personajeEnemigo= new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/laguna-map.png")
+              } else if (personajeNombre === "Watta") {
+                  personajeEnemigo = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/zack-map.png")
+              } else if(personajeNombre === "Allen") {
+                  personajeEnemigo = new Personaje("Allen", "./imagenes/ff7.png", 5, "./imagenes/s-map.png" )
+              }
+              personajeEnemigo.x = enemigo.x
+              personajeEnemigo.y = enemigo.y
+              
+              return personajeEnemigo
+            })
+          })
+    }
   })
 }
 
