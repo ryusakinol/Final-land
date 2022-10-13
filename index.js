@@ -1,7 +1,7 @@
-const express=require("express")
-const cors=require("cors")
+const express = require("express")
+const cors = require("cors")
 
-const app=express()
+const app = express()
 
 app.use(cors())
 
@@ -18,9 +18,13 @@ class Jugador {
          this.personaje = personaje
     }
 
-    actualizarPosicion(x,y) {
+    actualizarPosicion(x, y) {
         this.x = x 
         this.y = y 
+    }
+
+    asignarAtaques(ataques) {
+        this.ataques = ataques
     }
 }
 class Personaje {
@@ -61,7 +65,7 @@ app.post("/personaje/:jugadorId", (req, res) => {
     res.end()
 })
 
-app.post("/monterland/:jugadorId/posicion", (req, res) =>{
+app.post("/personaje/:jugadorId/posicion", (req, res) => {
     const jugadorId = req.params.jugadorId || ""
     const x = req.body.x || 0 
     const y = req.body.y || 0 
@@ -79,6 +83,30 @@ app.post("/monterland/:jugadorId/posicion", (req, res) =>{
     })
 })
 
-app.listen(8080,()=>{
+app.post("/personaje/:jugadorId/ataques", (req, res) => {
+
+    const jugadorId = req.params.jugadorId || ""
+
+    const ataques = req.body.ataques || []
+
+
+    const jugadorIndex = jugadores.findIndex((jugador) => jugadorId === jugador.id)
+
+    if (jugadorIndex >= 0) {
+        jugadores[jugadorIndex].asignarAtaques(ataques)
+    }
+
+    res.end()
+})
+
+app.get("/personaje/:jugadorId/ataques", (req, res) => {
+    const jugadorId = req.params.jugadorId || ""
+    const jugador = jugadores.find((jugador) => jugador.id === jugadorId)
+    res.send({
+        ataques: jugador.ataques || []
+    })
+})
+
+app.listen(8080, () => {
     console.log("Servidor funcionando")
 })

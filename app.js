@@ -20,6 +20,7 @@ const mapa = document.getElementById('mapa');
 const seccionSeleccionarAtaque = document.getElementById("seleccionar-ataque")
 
 let jugadorId = null
+let enemigoId = null
 let personajes = []
 let personajesEnemigos = []
 let ataqueJugador = []
@@ -163,13 +164,13 @@ function iniciarJuego() {
 function unirseAlJuego() {
     fetch("http://localhost:8080/unirse")
       .then(function (res){
-        if (res.ok) {
-            res.text()
-                .then(function (respuesta){
-                  console.log(respuesta)
-                  jugadorId = respuesta
-                })
-        }
+			if (res.ok) {
+				res.text()
+					.then(function (respuesta){
+					console.log(respuesta)
+					jugadorId = respuesta
+					})
+			}
       })
 }
 
@@ -261,9 +262,39 @@ function secuenciaAtaque() {
           boton.style.background = "#112f58" 
           boton.disabled = true
       }
-      ataqueAleatorioEnemigo()
+      if (ataqueJugador.length === 5 ) {
+        enviarAtaques()
+      }
     })
   })
+}
+
+function enviarAtaques() {
+	fetch(`http://localhost:8080/personaje/${jugadorId}/ataques`, {
+		method: "post",
+		headers: {
+		"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			ataques: ataqueJugador
+		})
+	})
+  intervalo = setInterval(obtenerAtaques, 50)
+}
+
+function obtenerAtaques() {
+	fetch(`http://localhost:8080/personaje/${enemigoId}/ataques`)
+		.then(function (res) { 
+			if (res.ok) {
+				res.json()
+					.then(function ({ ataques }) {
+						if (ataques.length === 5) {
+							ataqueEnemigo = ataques
+							combate()
+						}
+					})
+			}
+		 })
 }
 
 function seleccionarPersonajeEnemigo(enemigo) {
@@ -300,37 +331,37 @@ function indexAmbosOponente(jugador, enemigo) {
 }
 
 function combate() {
-
-  for (let index = 0; index < ataqueJugador.length; index++) {
-      if(ataqueJugador[index] === ataqueEnemigo[index]) {
-        indexAmbosOponente(index, index) 
-        crearMensaje("EMPATE")
-      } else if (ataqueJugador[index] === "FUEGO" && ataqueEnemigo[index] === "AIRE") {
-        crearMensaje("GANASTE")
-        victoriasJugador++
-        spanVidasEnemigo.innerHTML = vidaEnemigo;
-      } else if (ataqueJugador[index] === "AIRE" && ataqueEnemigo[index] === "AGUA") {
-        indexAmbosOponente(index, index) 
-        crearMensaje("GANASTE");
-        victoriasJugador++
-        spanVidasJugador.innerHTML = victoriasJugador
-      } else if (ataqueJugador[index] === "TIERRA" && ataqueEnemigo[index] === "AGUA") {
-        indexAmbosOponente(index, index) 
-        crearMensaje("GANASTE");
-        victoriasJugador++
-        spanVidasJugador.innerHTML = victoriasJugador
-      } else if (ataqueJugador[index] === "AGUA" && ataqueEnemigo[index] === "TIERRA") {
-        indexAmbosOponente(index, index) 
-        crearMensaje("GANASTE");
-        victoriasJugador++
-        spanVidasJugador.innerHTML = victoriasJugador
-      } else {
-        indexAmbosOponente(index, index) 
-        crearMensaje("PERDISTE");
-        victoriasEnemigo++
-        spanVidasEnemigo.innerHTML = victoriasEnemigo
-      }
-    }
+	clearInterval(intervalo)
+	for (let index = 0; index < ataqueJugador.length; index++) {
+		if(ataqueJugador[index] === ataqueEnemigo[index]) {
+			indexAmbosOponente(index, index) 
+			crearMensaje("EMPATE")
+		} else if (ataqueJugador[index] === "FUEGO" && ataqueEnemigo[index] === "AIRE") {
+			crearMensaje("GANASTE")
+			victoriasJugador++
+			spanVidasEnemigo.innerHTML = vidaEnemigo;
+		} else if (ataqueJugador[index] === "AIRE" && ataqueEnemigo[index] === "AGUA") {
+			indexAmbosOponente(index, index) 
+			crearMensaje("GANASTE");
+			victoriasJugador++
+			spanVidasJugador.innerHTML = victoriasJugador
+		} else if (ataqueJugador[index] === "TIERRA" && ataqueEnemigo[index] === "AGUA") {
+			indexAmbosOponente(index, index) 
+			crearMensaje("GANASTE");
+			victoriasJugador++
+			spanVidasJugador.innerHTML = victoriasJugador
+		} else if (ataqueJugador[index] === "AGUA" && ataqueEnemigo[index] === "TIERRA") {
+			indexAmbosOponente(index, index) 
+			crearMensaje("GANASTE");
+			victoriasJugador++
+			spanVidasJugador.innerHTML = victoriasJugador
+		} else {
+			indexAmbosOponente(index, index) 
+			crearMensaje("PERDISTE");
+			victoriasEnemigo++
+			spanVidasEnemigo.innerHTML = victoriasEnemigo
+		}
+	}
   revisarVidas()
 }
 
@@ -392,51 +423,61 @@ function pintarCanvas() {
 
   personajesEnemigos.forEach(function(personaje){
     personaje.pintarPersonaje()
+    revisarColision(personaje)
   })
-  if (personajeJugadorObjeto.velocidadX !== 0 || personajeJugadorObjeto.velocidadY !== 0) {
-    revisarColision(yfryEnemigo)
-    revisarColision(allenEnemigo)
-    revisarColision(growdoEnemigo)
-    revisarColision(wattaEnemigo)
-  }
 }
 
 function enviarPosicion(x, y) {
-  fetch(`http://localhost:8080/monterland/${jugadorId}/posicion`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      x: x,
-      y: y
-    })
-  })
-  .then(function (res){
-    if (res.ok) {
-      res.json()
-          .then(function({ enemigos }){
-              console.log(enemigos)
-              personajesEnemigos = enemigos.map(function(enemigo) {
-              let personajeEnemigo = null
-              const personajeNombre = enemigo.personaje.nombre || ""
-              if (personajeNombre === "Yfry") {
-                  personajeEnemigo = new Personaje("Yfry", "./imagenes/14-Squall-Leonhart-final.png", 5, "./imagenes/squall-map.png")
-              } else if (personajeNombre === "Growdo") {
-                  personajeEnemigo= new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/laguna-map.png")
-              } else if (personajeNombre === "Watta") {
-                  personajeEnemigo = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/zack-map.png")
-              } else if(personajeNombre === "Allen") {
-                  personajeEnemigo = new Personaje("Allen", "./imagenes/ff7.png", 5, "./imagenes/s-map.png" )
-              }
-              personajeEnemigo.x = enemigo.x
-              personajeEnemigo.y = enemigo.y
-              
-              return personajeEnemigo
-            })
-          })
-    }
-  })
+fetch(`http://localhost:8080/personaje/${jugadorId}/posicion`, {
+method: "post",
+headers: {
+  "Content-Type": "application/json"
+},
+body: JSON.stringify({
+  x: x,
+  y: y
+})
+})
+.then(function (res){
+if (res.ok) {
+  res.json()
+	  .then(function({ enemigos }){
+		  console.log(enemigos)
+		  personajesEnemigos = enemigos.map(function(enemigo) {
+		  let personajeEnemigo = null
+			if(enemigo.pesonaje != undefined) {
+				const personajeNombre = enemigo.mokepon.nombre 
+				switch (personajeNombre)
+				{
+				case "Yfry":
+					personajeEnemigo = new Personaje("Yfry", "./imagenes/14-Squall-Leonhart-final.png", 5, "./imagenes/squall-map.png", enemigo.id)
+				break
+					case 
+						"Growdo":
+					personajeEnemigo = new Personaje("Growdo", "./imagenes/laguna.png", 5, "./imagenes/laguna-map.png", enemigo.id)
+								
+				break
+					case "Watta":
+					personajeEnemigo = new Personaje("Watta", "./imagenes/zack.png", 5,"./imagenes/zack-map.png", enemigo.id)
+
+				break
+					case "Allen":
+						personajeEnemigo = new Personaje("Allen", "./imagenes/ff7.png", 5, "./imagenes/s-map.png", enemigo.id)
+
+				break
+				default:
+				break
+				}
+
+					personajeEnemigo.x = enemigo.x
+					personajeEnemigo.y = enemigo.y
+				}
+				return personajeEnemigo
+				})
+
+			})	
+		}		
+	})
 }
 
 function moverArriba() {
@@ -481,6 +522,7 @@ function sePresionoUnaTecla(event) {
 function iniciarMapa() {
   
   personajeJugadorObjeto = obtenerObjetoPersonaje(personaJugador)
+  console.log(personajeJugadorObjeto, personaJugador);
   intervalo = setInterval(pintarCanvas, 50)
 
   window.addEventListener("keydown", sePresionoUnaTecla)
@@ -518,6 +560,7 @@ function revisarColision(enemigo){
   detenerMovimiento()
   clearInterval(intervalo)
   console.log('se detecto una colision');
+  enemigoId = enemigo.id
   seccionSeleccionarAtaque.style.display = "flex"
   seccionVerMapa.style.display = "none"
   seleccionarPersonajeEnemigo(enemigo)
