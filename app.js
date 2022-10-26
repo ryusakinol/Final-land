@@ -313,6 +313,34 @@ function obtenerAtaques() {
   });
 }
 
+function enviarAtaques() {
+	fetch(`http://localhost:8080/personaje/${jugadorId}/ataques`, {
+		method: "post",
+		headers: {
+		"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			ataques: ataqueJugador
+		})
+	})
+  intervalo = setInterval(obtenerAtaques, 50)
+}
+
+function obtenerAtaques() {
+	fetch(`http://localhost:8080/personaje/${enemigoId}/ataques`)
+		.then(function (res) { 
+			if (res.ok) {
+				res.json()
+					.then(function ({ ataques }) {
+						if (ataques.length === 5) {
+							ataqueEnemigo = ataques
+							combate()
+						}
+					})
+			}
+		 })
+}
+
 function seleccionarPersonajeEnemigo(enemigo) {
   personaEnemigo.innerHTML = enemigo.nombre;
   ataquesPersonajeEnemigo = enemigo.ataques;
